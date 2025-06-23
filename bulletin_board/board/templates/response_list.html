@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Отклики на ваши объявления</h1>
+  <form method="get">
+    <label>Фильтр по объявлению:</label>
+    <select name="post">
+      <option value="">Все</option>
+      {% for post in posts %}
+        <option value="{{ post.pk }}" {% if post.pk == selected_post_id %}selected{% endif %}>{{ post.title }}</option>
+
+      {% endfor %}
+    </select>
+    <button type="submit">Фильтровать</button>
+  </form>
+  <ul>
+    {% for response in responses %}
+      <li>
+        <p><strong>Отклик на:</strong> {{ response.post.title }}</p>
+        <p>{{ response.text }}</p>
+        <p><em>От:</em> {{ response.author.username }}</p>
+        {% if not response.is_accepted %}
+          <form method="post" action="{% url 'accept_response' response.pk %}">
+            {% csrf_token %}
+            <button type="submit">Принять</button>
+          </form>
+        {% else %}
+          <p style="color: green;">Отклик принят</p>
+        {% endif %}
+        <form method="post" action="{% url 'delete_response' response.pk %}">
+          {% csrf_token %}
+          <button type="submit">Удалить</button>
+        </form>
+      </li>
+    {% empty %}
+      <li>Нет откликов.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

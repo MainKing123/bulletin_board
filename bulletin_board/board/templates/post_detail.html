@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>{{ post.title }}</h1>
+  <p><strong>Категория:</strong> {{ post.get_category_display }}</p>
+  <p>{{ post.content|safe }}</p>
+  <p><em>Автор:</em> {{ post.author.username }} | {{ post.created_at }}</p>
+
+  {% if user.is_authenticated and user != post.author %}
+    <h3>Откликнуться:</h3>
+    <form method="post" action="{% url 'response_create' post.pk %}">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Отправить</button>
+    </form>
+  {% elif user == post.author %}
+    <p><em>Это ваше объявление.</em></p>
+  {% else %}
+    <p><a href="{% url 'login' %}">Войдите</a>, чтобы откликнуться.</p>
+  {% endif %}
+{% endblock %}

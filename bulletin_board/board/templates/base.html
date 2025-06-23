@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Доска объявлений{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.css">
+</head>
+<body>
+
+    <header>
+        <h1><a href="{% url 'ad_list' %}">Доска объявлений</a></h1>
+        <nav>
+            {% if user.is_authenticated %}
+                <span>Привет, {{ user.username }}!</span> |
+                <a href="{% url 'logout' %}">Выйти</a>
+            {% else %}
+                <a href="{% url 'login' %}">Войти</a> |
+                <a href="{% url 'register' %}">Регистрация</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                {% if message.tags %}
+    <li class="{{ message.tags }}">{{ message }}</li>
+{% else %}
+    <li>{{ message }}</li>
+{% endif %}
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <main>
+        {% block content %}
+        <!-- Здесь будет содержимое дочерних шаблонов -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; {{ year|default:2025 }} Моя доска объявлений</p>
+    </footer>
+</body>
+</html>

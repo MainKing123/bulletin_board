@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Личный кабинет{% endblock %}
+
+{% block content %}
+<h2>Личный кабинет</h2>
+
+<h3>Мои объявления</h3>
+<ul>
+    {% for post in posts %}
+        <li>
+            <strong>{{ post.title }}</strong> — {{ post.created_at|date:"d.m.Y H:i" }}
+            <br>{{ post.content|truncatechars:100 }}
+        </li>
+    {% empty %}
+        <li>У вас нет объявлений.</li>
+    {% endfor %}
+</ul>
+
+<h3>Мои отклики</h3>
+<ul>
+    {% for response in responses %}
+        <li>
+            Отклик на <strong>{{ response.post.title }}</strong>:
+            <em>{{ response.text|linebreaks }}</em>
+            <br>Статус:
+            {% if response.is_accepted %}
+                ✅ Принят
+            {% elif response.is_accepted is not None %}
+                ❌ Отклонён
+            {% else %}
+                ⏳ В ожидании
+            {% endif %}
+        </li>
+    {% empty %}
+        <li>Вы ещё не оставили откликов.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

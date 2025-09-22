@@ -19,6 +19,7 @@ urlpatterns = [
     path('responses/<int:pk>/accept/', accept_response, name='accept_response'),
     path('responses/<int:pk>/reject/', reject_response, name='reject_response'),
     path('responses/<int:pk>/toggle/', response_toggle_view, name='response_toggle'),
+    path('post/<int:pk>/response/', views.response_create, name='response_create'),
     path('register/', register_view, name='register'),
     path('confirm/', confirm_email_view, name='confirm_email'),
     path('account/', profile_view, name='account'),
